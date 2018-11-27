@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# 
+# NOTICE: run this script, after running tests.py
+#
+
 RIDE_ID="181100001"
 
 DRIVER_URI="http://127.0.0.1:5000/tracking/mobile/driver"
