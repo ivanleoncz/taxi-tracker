@@ -8,8 +8,8 @@
 from app import app, request, API_KEY, API_URI
 from app.modules import database
 from datetime import datetime
+from json import loads
 import requests
-import json
 
 
 @app.route('/tracking/mobile/driver', methods=['POST'])
@@ -32,13 +32,13 @@ def f_driver():
         query["key"] = API_KEY
         query["format"] = "json"
         response = requests.get(API_URI, params=query).text
-        data = json.loads(response)
+        data = loads(response)
         addr = data.get("address")
         del query["key"]
         del query["format"]
         dbase = database.Database()
         result = dbase.add_location(ride_id, driver_id, driver_token,
-                                    addr, query, ts)
+                                  addr, query, ts)
         return result
 
 @app.route('/tracking/mobile/passenger', methods=['GET'])
