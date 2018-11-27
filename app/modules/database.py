@@ -28,14 +28,15 @@ class Database():
                         }
                 )
                 self.client.close()
-                if type(record_id) is bson.objectid.ObjectId:
-                    return 0
+                #  TODO: better evaluate if data is an ObjectID
+                if len(str(record_id.inserted_id)) > 1:
+                    return "0"
                 else:
-                    return 1
+                    return "1"
             except Exception as e:
                 return "Fail to add record to Rides: %s" % e
         else:
-            return 2
+            return "2"
 
 
     def get_last_position(self, ride_id, passenger_username, token):
@@ -46,11 +47,11 @@ class Database():
             try:
                 data = db.find_one({"RideID":ride_id}, sort=[('_id', -1)])
                 self.client.close()
-                return data
+                return str(data)
             except Exception as e:
                 return "Fail to read record from Rides: %s" % e
         else:
-            return 1
+            return "1"
 
 
     def login(self, user_type, username, password):
