@@ -1,8 +1,8 @@
 
 from app import DB_URI
+from datetime import datetime
 from pymongo import MongoClient
 import bcrypt
-from datetime import datetime
 import os
 
 class Database():
@@ -18,13 +18,15 @@ class Database():
         if token_status == 0:
             db = self.client.taxi.Rides
             try:
-                record_id = db.insert({
-                    "RideID":ride_id,
-                    "Driver":driver,
-                    "TrackedAddress":addr,
-                    "GeoQuery":coord,
-                    "TimeStamp":datetime.now()
-                })
+                record_id = db.insert_one(
+                        {
+                            "RideID":ride_id,
+                            "Driver":driver_username,
+                            "TrackedAddress":addr,
+                            "GeoQuery":coord,
+                            "TimeStamp":datetime.now()
+                        }
+                )
                 self.client.close()
                 if type(record_id) is bson.objectid.ObjectId:
                     return 0
@@ -42,9 +44,7 @@ class Database():
         if token_status == 0:
             db = self.client.taxi.Rides
             try:
-                data = db.find_one(
-                        {"RideID":ride_id}
-                        ).sort({'_id':-1}).limit(1)
+                data = db.find_one({"RideID":ride_id}, sort=[('_id', -1)])
                 self.client.close()
                 return data
             except Exception as e:
@@ -102,8 +102,8 @@ class Database():
                 {
                     "Name":name,
                     "UserName":username,
-                    "PassWord:":pass_hash,
-                    "Token:":token
+                    "PassWord":pass_hash,
+                    "Token":token
                 }
             )
             self.client.close()
