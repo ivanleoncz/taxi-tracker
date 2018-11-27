@@ -5,7 +5,7 @@
     - reading taxi position (/tracking/customer)
 """
 
-from app import app, request, API_KEY, API_URI
+from app import app, request
 from app.modules import database
 from app.modules import location
 from datetime import datetime
