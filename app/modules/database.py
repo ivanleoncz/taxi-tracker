@@ -55,8 +55,7 @@ class Database():
     def login(self, user_type=None, username, password):
         """ Performs the authentication of a user (driver or passenger). """
 
-        assert (user_type is None), "user_type must be dr
-        iver or passenger"
+        assert (user_type is None), "user_type must be driver or passenger"
 
         db = None
         if user_type is "driver":
