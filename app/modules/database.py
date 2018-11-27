@@ -11,9 +11,9 @@ class Database():
         self.client = MongoClient(DB_URI, serverSelectionTimeoutMS=6000)
 
 
-    def track_position(self, ride_id, driver, addr, query, ts, token):
+    def track_position(self, ride_id, driver_username, addr, coord, ts, token):
         """ Tracks the Taxi geographical position. """
-        token_status = verify_token("driver", driver, token)
+        token_status = verify_token("driver", driver_username, token)
         if token_status == 0:
             db = self.client.taxi.Rides
             try:
@@ -21,7 +21,7 @@ class Database():
                     "RideID":ride_id,
                     "Driver":driver,
                     "TrackedAddress":addr,
-                    "GeoQuery":query,
+                    "GeoQuery":coord,
                     "LocationTime":ts
                 })
                 self.client.close()
@@ -35,9 +35,9 @@ class Database():
             return 2
 
 
-    def get_last_position(self, ride_id, passenger, token):
+    def get_last_position(self, ride_id, passenger_username, token):
         """ Reads the last tracked position of a Taxi, for a specific ride. """
-        token_status = verify_token("passenger", passenger, token)
+        token_status = verify_token("passenger", passenger_username, token)
         if token_status == 0:
             db = self.client.taxi.Rides
             try:
