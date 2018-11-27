@@ -91,7 +91,7 @@ class Database():
 
         # encrypting password
         salt = bcrypt.gensalt()
-        pass_hash = bcrypt.hashpw(password, salt)
+        pass_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
 
         # token=None is designed for test purposes
         if token is None:
