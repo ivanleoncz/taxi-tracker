@@ -48,8 +48,8 @@ def f_passenger():
     Mobile Device, for the ride (RideID) which was requested by the passnger.
     """
     if request.method == "GET":
-        passenger = request.form.get('username')
-        token = request.form.get('token')
+        passenger = request.args.get('username')
+        token = request.args.get('token')
         ride_id = request.args.get('ride_id')
         dbase = database.Database()
         result = dbase.get_last_position(passenger, token, ride_id)
