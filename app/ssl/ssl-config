@@ -1,0 +1,21 @@
+[ req ]
+default_bits        = 2048
+distinguished_name  = req_distinguished_name
+attributes          = req_attributes
+prompt              = no
+
+[ req_distinguished_name ]
+C            = US
+ST           = NY
+L            = NY
+O            = TaxiDriver
+OU           = IT
+CN           = taxidriver.com
+emailAddress = support@taxidriver.com
+
+[ req_attributes ]
+challengePassword = jumpsoverthelazydog
+
+
+# See the link for more information about [ req_distinguished_name ] section
+# https://www.phildev.net/ssl/opensslconf.html
