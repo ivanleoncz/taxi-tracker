@@ -8,7 +8,6 @@
 from app import app, request
 from app.modules import database
 from app.modules import location
-from datetime import datetime
 from json import loads
 import requests
 
@@ -43,13 +42,11 @@ def f_driver():
         # searching for address, based on geographical coordinates
         search = location.Location()
         addr = search.reverse(latitude, longitude)
-        # registering timestamp, after address search
-        ts = datetime.now()
         # building dictionary for search coordinates
         coord = {"lat": latitude, "lon": longitude}
         # storing traced position
         dbase = database.Database()
-        result = dbase.track_position(ride_id, driver, addr, coord, ts, token)
+        result = dbase.track_position(ride_id, driver, addr, coord, token)
         return result
 
 
