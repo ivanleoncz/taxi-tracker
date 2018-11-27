@@ -1,9 +1,12 @@
+""" Module designed for jobs related with database context. """
 
 from app import DB_URI
 from datetime import datetime
 from pymongo import MongoClient
 import bcrypt
 import os
+
+__author__ = "@ivanleoncz"
 
 class Database():
 
