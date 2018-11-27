@@ -24,9 +24,9 @@ def f_driver():
     if request.method == "POST":
         ts = datetime.now()
         query = {}
+        driver = request.form.get('username')
+        token = request.form.get('token')
         ride_id = request.form.get('ride_id')
-        driver_id = request.form.get('driver_id')
-        driver_token = request.form.get('driver_token')
         query["lat"] = request.form.get('lat')
         query["lon"] = request.form.get('lon')
         query["key"] = API_KEY
@@ -37,9 +37,9 @@ def f_driver():
         del query["key"]
         del query["format"]
         dbase = database.Database()
-        result = dbase.add_location(ride_id, driver_id, driver_token,
-                                  addr, query, ts)
+        result = dbase.track_position(driver, token, ride_id, addr, query, ts)
         return result
+
 
 @app.route('/tracking/mobile/passenger', methods=['GET'])
 def f_passenger():
@@ -48,9 +48,9 @@ def f_passenger():
     Mobile Device, for the ride (RideID) which was requested by the passnger.
     """
     if request.method == "GET":
+        passenger = request.form.get('username')
+        token = request.form.get('token')
         ride_id = request.args.get('ride_id')
-        user_id = request.form.get('user_id')
-        user_token = request.form.get('user_token')
         dbase = database.Database()
-        result = dbase.read_cur_location(ride_id, user_id, user_token)
+        result = dbase.get_last_position(passenger, token, ride_id)
         return result
