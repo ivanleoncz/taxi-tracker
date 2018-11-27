@@ -11,7 +11,7 @@ class Database():
         self.client = MongoClient(DB_URI, serverSelectionTimeoutMS=6000)
 
 
-    def track_position(self, driver, token, ride_id, addr, query, ts):
+    def track_position(self, ride_id, driver, addr, query, ts, token):
         """ Tracks the Taxi geographical position. """
         token_status = verify_token("driver", driver, token)
         if token_status == 0:
@@ -22,7 +22,7 @@ class Database():
                     "Driver":driver,
                     "TrackedAddress":addr,
                     "GeoQuery":query,
-                    "TrackTime":ts
+                    "LocationTime":ts
                 })
                 self.client.close()
                 if type(record_id) is bson.objectid.ObjectId:
@@ -30,12 +30,12 @@ class Database():
                 else:
                     return 1
             except Exception as e:
-                return "Fail to add record to RideTracking: %s" % e
+                return "Fail to add record to Rides: %s" % e
         else:
             return 2
 
 
-    def get_last_position(self, passenger, token, ride_id):
+    def get_last_position(self, ride_id, passenger, token):
         """ Reads the last tracked position of a Taxi, for a specific ride. """
         token_status = verify_token("passenger", passenger, token)
         if token_status == 0:
@@ -47,15 +47,16 @@ class Database():
                 self.client.close()
                 return data
             except Exception as e:
-                return "fail to read record from Rides: %s" % e
+                return "Fail to read record from Rides: %s" % e
         else:
             return 1
 
 
-    def auth(self, user_type=None, username, password):
+    def login(self, user_type=None, username, password):
         """ Performs the authentication of a user (driver or passenger). """
 
-        assert (user_type is None), "user_type must be driver or passenger"
+        assert (user_type is None), "user_type must be dr
+        iver or passenger"
 
         db = None
         if user_type is "driver":
@@ -77,7 +78,7 @@ class Database():
             else:
                 return 1
         except Exception as e:
-            return "fail to login (%s:%s): %s" % (user_type, username, e)
+            return "Fail to login (%s:%s): %s" % (user_type, username, e)
 
 
     def create_user(self, user_type=None, name, username, password):
