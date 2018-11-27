@@ -15,8 +15,9 @@ import json
 @app.route('/tracking/mobile/driver', methods=['POST'])
 def f_driver():
     """
-    Tracks taxi geographical position, based on coordinates (lat/lon),
-    provided by the Mobile App (through the activated GPS circuit).
+    Tracks geographical position from the taxi driver's Mobile Device,
+    based on coordinates (lat/lon) provided by the Mobile App (through
+    the activated GPS circuit).
 
     Reverse Geocode lookup is perfomed on LocationIQ API.
     """
@@ -43,7 +44,8 @@ def f_driver():
 @app.route('/tracking/mobile/passenger', methods=['GET'])
 def f_passenger():
     """
-    Provides taxi geographical position, based on the id of the ride (RideID).
+    Provides the last tracked geographical position from the taxi drive's
+    Mobile Device, for the ride (RideID) which was requested by the passnger.
     """
     if request.method == "GET":
         ride_id = request.args.get('ride_id')
