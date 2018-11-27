@@ -1,7 +1,10 @@
+""" Module designed for geocoding. """
 
 from app import API_URI, API_KEY
 from json import loads
 import requests
+
+__author__ = "@ivanleoncz"
 
 class Location():
 
