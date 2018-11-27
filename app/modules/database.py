@@ -2,7 +2,7 @@
 from app import DB_URI
 from pymongo import MongoClient
 import bcrypt
-import datetime
+from datetime import datetime
 import os
 
 class Database():
