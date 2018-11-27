@@ -53,10 +53,8 @@ class Database():
             return 1
 
 
-    def login(self, user_type=None, username, password):
+    def login(self, user_type, username, password):
         """ Performs the authentication of a user (driver or passenger). """
-
-        assert (user_type is None), "user_type must be driver or passenger"
 
         db = None
         if user_type is "driver":
@@ -81,10 +79,8 @@ class Database():
             return "Fail to login (%s:%s): %s" % (user_type, username, e)
 
 
-    def create_user(self, user_type=None, name, username, password, token=None):
+    def create_user(self, user_type, name, username, password, token=None):
         """ Creates a user, depending on its type (driver or passenger). """
-
-        assert (user_type is None), "user_type must be driver or passenger"
 
         db = None
         # defining collection, depending on user_type
@@ -117,10 +113,8 @@ class Database():
             return "fail to create user (%s:%s): %s" % (user_type, username, e)
 
 
-    def verify_token(self, user_type=None, username, token):
+    def verify_token(self, user_type, username, token):
         """ Verifies validity of a token for a username. """
-
-        assert (user_type is None), "user_type must be driver or passenger"
 
         # defining collection, depending on user_type
         db = None
