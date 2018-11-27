@@ -7,6 +7,7 @@
 
 from app import app, request, API_KEY, API_URI
 from app.modules import database
+from app.modules import location
 from datetime import datetime
 from json import loads
 import requests
@@ -18,8 +19,6 @@ def f_driver():
     Tracks geographical position from the taxi driver's Mobile Device,
     based on coordinates (lat/lon) provided by the Mobile App (through
     the activated GPS circuit).
-
-    Reverse Geocode lookup is perfomed on LocationIQ API.
 
     POST parameters:
 
@@ -35,28 +34,22 @@ def f_driver():
         - unsuccessful: int (1: fail to track / 2: fail to validate token)
     """
     if request.method == "POST":
-        # processing POST parameters (some stored directly in query dict)
+        # processing POST parameters
         driver = request.form.get('username')
         token = request.form.get('token')
         ride_id = request.form.get('ride_id')
-        # building query string parameters for LocationIQ API
-        query = {}
-        query["lat"] = request.form.get('lat')
-        query["lon"] = request.form.get('lon')
-        query["key"] = API_KEY
-        query["format"] = "json"
-        # processing request and registering location timestamp
-        response = requests.get(API_URI, params=query).text
+        latitude = request.form.get('lat')
+        longitude = request.form.get('lon')
+        # searching for address, based on geographical coordinates
+        search = location.Location()
+        addr = search.reverse(latitude, longitude)
+        # registering timestamp, after address search
         ts = datetime.now()
-        # processing API response
-        data = loads(response)
-        addr = data.get("address")
-        # reusing dictionary for storing geographical query (lat/lon)
-        del query["key"]
-        del query["format"]
+        # building dictionary for search coordinates
+        coord = {"lat": latitude, "lon": longitude}
         # storing traced position
         dbase = database.Database()
-        result = dbase.track_position(ride_id, driver, addr, query, ts, token)
+        result = dbase.track_position(ride_id, driver, addr, coord, ts, token)
         return result
 
 
