@@ -14,4 +14,8 @@ class Location():
         query["format"] = "json"
 	response = requests.get(API_URI, params=query).text
 	data = loads(response)
-	return data.get("address")
+	addr = data.get("address")
+        if type(addr) is dict:
+            return addr
+        else:
+            return 1
