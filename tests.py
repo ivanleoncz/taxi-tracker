@@ -16,12 +16,12 @@ class Probe(unittest.TestCase):
     driver = "Robert De Niro"
     driver_username = "deniro"
     driver_password = os.urandom(4).hex()
-    driver_token = os.urandom(24).hex()
+    driver_token = "3c6cd670b094"
 
     passenger = "Al Pacino"
     passenger_username = "pacino"
     passenger_password = os.urandom(4).hex()
-    passenger_token = os.urandom(24).hex()
+    passenger_token = "c74767d8d9c2"
 
     #
     # USA/NY - New York
