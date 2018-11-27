@@ -2,6 +2,7 @@
 from app import DB_URI
 from pymongo import MongoClient
 import bcrypt
+import datetime
 import os
 
 class Database():
@@ -11,7 +12,7 @@ class Database():
         self.client = MongoClient(DB_URI, serverSelectionTimeoutMS=6000)
 
 
-    def track_position(self, ride_id, driver_username, addr, coord, ts, token):
+    def track_position(self, ride_id, driver_username, addr, coord, token):
         """ Tracks the Taxi geographical position. """
         token_status = verify_token("driver", driver_username, token)
         if token_status == 0:
@@ -22,7 +23,7 @@ class Database():
                     "Driver":driver,
                     "TrackedAddress":addr,
                     "GeoQuery":coord,
-                    "LocationTime":ts
+                    "TimeStamp":datetime.now()
                 })
                 self.client.close()
                 if type(record_id) is bson.objectid.ObjectId:
@@ -80,7 +81,7 @@ class Database():
             return "Fail to login (%s:%s): %s" % (user_type, username, e)
 
 
-    def create_user(self, user_type=None, name, username, password):
+    def create_user(self, user_type=None, name, username, password, token=None):
         """ Creates a user, depending on its type (driver or passenger). """
 
         assert (user_type is None), "user_type must be driver or passenger"
@@ -95,7 +96,10 @@ class Database():
         # encrypting password
         salt = bcrypt.gensalt()
         pass_hash = bcrypt.hashpw(password, salt)
-        token = os.urandom(24).hex()
+
+        # token=None is designed for test purposes
+        if token is None:
+            token = os.urandom(24).hex()
 
         try:
             db.insert_one(
