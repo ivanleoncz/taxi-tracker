@@ -4,6 +4,7 @@ Tracking down taxis with geographic data.
 
 ### Requirements
 - MongoDB: 3.4.x
+- see requirements.txt
 
 ### Usage (follow the order)
 - 1. execute tests.py, for populating database
